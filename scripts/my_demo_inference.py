@@ -1,4 +1,4 @@
-# from transformers import Wav2Vec2Processor
+# from trnsformers import Wav2Vec2Processor
 from transformers import Wav2Vec2FeatureExtractor
 from transformers import AutoModel
 import torch
@@ -21,7 +21,7 @@ resample_rate = processor.sampling_rate
 # make sure the sample_rate aligned
 if resample_rate != sampling_rate:
     print(f'setting rate from {sampling_rate} to {resample_rate}')
-    resampler = T.Resample(sampling_rate, resample_rate)
+    resampler = T.Resample(sampling_rate, resample_rate).double()
 else:
     resampler = None
 
@@ -29,7 +29,7 @@ else:
 if resampler is None:
     input_audio = dataset[0]["audio"]["array"]
 else:
-    input_audio = resampler(torch.from_numpy(dataset[0]["audio"]["array"]).float())
+    input_audio = resampler(torch.from_numpy(dataset[0]["audio"]["array"]))
   
 inputs = processor(input_audio, sampling_rate=resample_rate, return_tensors="pt")
 with torch.no_grad():
